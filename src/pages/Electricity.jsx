@@ -1,24 +1,83 @@
-import React from 'react'
-import SideBar from '../components/SideBar'
-import TopNavBar from '../components/TopNavBar'
-import CustomFrame from '../components/CustomFrame'
-import SearchBar from '../components/SearchBar'
+
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import CustomFrame from "../components/CustomFrame";
+import SideBar from "../components/SideBar";
+import TopNavBar from "../components/TopNavBar";
+import SearchBar from "../components/SearchBar";
+import Compo from "../components/Compo";
+import ElecTBody from "../components/ElecTBody";
 
 export default function Electricity() {
-    return (
-        <div className="flex">
-      
-        <div className="fixed left-0 top-0 h-screen w-[220px] bg-[#F6F6F6] shadow-md">
-          <SideBar />
-        </div>
-  
-        
-        <div className="flex-1 ml-[220px] p-6 overflow-auto">
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("search") || "";
+
+
+  const handleSearch = (searchQuery) => {
+    setSearchParams(searchQuery ? { search: searchQuery } : {});
+  };
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+    
+    checkScreenSize();
+    
+    window.addEventListener('resize', checkScreenSize);
+    
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  return (
+    <div className="flex">
+
+      <SideBar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+      <div
+        className={`flex-1 p-6 overflow-auto transition-all duration-300 ${
+          isSidebarOpen ? "opacity-50 pointer-events-none" : ""
+        }`}
+      >
+
+        <div className="relative z-10">
           <TopNavBar title="Electricity" />
-          <SearchBar />
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <SearchBar onSearch={handleSearch} />
           <CustomFrame />
-          </div>
-          </div>
-    )
-  }
-  
+        </div>
+
+        <div className="mt-8">
+          <Compo 
+            title={'Total Electricity'} 
+            value={'2,200,000.53'} 
+            month={'vs last month'} 
+            percentage={'-5%'} 
+          />
+        </div>
+        <div className="mt-16 w-full">
+          
+            <div className=" p-4 w-full">
+              <div className="grid grid-cols-7 gap-3 text-xs sm:text-sm font-semibold text-black py-2">
+                <span className="text-center min-w-0 truncate">Username</span>
+                <span className="text-center min-w-0 truncate">Email</span>
+                <span className="text-center min-w-0 truncate">Provider</span>
+                <span className="text-center min-w-0 truncate">Amount</span>
+                <span className="text-center min-w-0 truncate">Date</span>
+                <span className="text-center min-w-0 truncate">Transaction ID</span>
+              </div>
+            </div>
+
+          <ElecTBody searchQuery={query} />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,23 +1,61 @@
-import React from 'react'
+
+
+
+// import React from 'react';
+// import { ChevronDown, Calendar } from "lucide-react";
+
+// const CustomFrame = () => {
+//   return (
+//     <div className="absolute top-[103px] xxl:left-[1312px] right-6 flex items-center gap-2 sm:gap-3 rounded-md border border-black p-0.5 sm:p-1 sm:max-w-[140px] ml-auto">
+//       <div className="flex items-center gap-1 sm:gap-2">
+//         <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+        
+//         {/* Text */}
+//         <span className="text-[10px] sm:text-xs font-medium text-black">
+//           All time
+//         </span>
+//       </div>
+//       {/* Downward Arrow */}
+//       <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
+//     </div>
+//   );
+// };
+
+// export default CustomFrame;
+
+
+import React, { useState } from "react";
 import { ChevronDown, Calendar } from "lucide-react";
 
 const CustomFrame = () => {
+  const [timeFilter, setTimeFilter] = useState("all-time");
+
   return (
-    <div className="absolute left-[1312px] top-[103px] flex items-center gap-[15px] rounded-[3px] border cursor-pointer border-black p-[3px_5px] w-[98px] h-[20px]">
-    <div className="flex items-center gap-[5px] w-[55px] h-[14px]">
-      <Calendar className="w-[14px] h-[14px] " />
- 
+    <div className="absolute top-[103px] xxl:left-[1312px] right-6 flex cursor-pointer items-center gap-2 sm:gap-3 rounded-md border border-black p-0.5 sm:p-1 sm:max-w-[140px] ml-auto bg-white">
+      {/* Calendar Icon */}
+      <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
 
-      {/* Text */}
-      <span className="text-[10px] font-medium leading-[12px] text-black">
-        All time
-      </span>
+      {/* Select Dropdown */}
+      <div className="relative inline-block w-full">
+        <select
+          className="appearance-none cursor-pointer border border-transparent rounded-md px-2 py-1 bg-white text-[10px] sm:text-xs font-medium text-black focus:outline-none"
+          value={timeFilter}
+          onChange={(e) => setTimeFilter(e.target.value)}
+        >
+          <option value="all-time">All time</option>
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="this-week">This week</option>
+          <option value="this-month">This month</option>
+        </select>
+
+        {/* Dropdown Icon */}
+        <div className="pointer-events-none absolute inset-y-0 right-1 flex items-center text-black">
+          <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
+        </div>
+      </div>
     </div>
+  );
+};
 
-    {/* Downward Arrow */}
-    <ChevronDown size={14} className=" text-black" />
-  </div>
-  )
-}
-
-export default CustomFrame
+export default CustomFrame;

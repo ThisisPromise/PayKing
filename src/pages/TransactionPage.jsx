@@ -1,24 +1,30 @@
 import React from 'react'
+import { useState } from 'react'
 import SideBar from '../components/SideBar'
 import TopNavBar from '../components/TopNavBar'
 import CustomFrame from '../components/CustomFrame'
 import SearchBar from '../components/SearchBar'
 
 export default function TransactionPage() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
     return (
-        <div className="flex">
-      
-        <div className="fixed left-0 top-0 h-screen w-[220px] bg-[#F6F6F6] shadow-md">
-          <SideBar />
-        </div>
+      <div className="flex">
   
+      <SideBar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+      <div className={`flex-1 p-6 overflow-auto transition-all duration-300 ${isSidebarOpen ? "opacity-50 pointer-events-none" : ""}`}>
         
-        <div className="flex-1 ml-[220px] p-6 overflow-auto">
+        <div className="relative z-10">
           <TopNavBar title="Transactions" />
+        </div>
+
+        <div className="flex flex-wrap gap-4 mt-4">
           <SearchBar />
           <CustomFrame />
-          </div>
-          </div>
+        </div>
+        </div>
+        </div>
     )
   }
   
